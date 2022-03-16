@@ -19,7 +19,7 @@ function formRequest() {
     insertData.innerHTML = `
    <div class="card"><img src="${response.url}"></div>`
      })
-    
+    .catch(() => {console.log('ошибка загрузки фотографии')});
   } else {
     insertData.innerHTML = 'Одно из чисел вне диапазона от 100 до 300'
   }; 
