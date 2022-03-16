@@ -1,15 +1,52 @@
 const myButton = document.querySelector('.j-btn');
+const insertData = document.querySelector('.insertData')
 
-const input1 = document.querySelector('.input1')
+function formUrl() {
+  let data = Array.from(document.querySelectorAll('.input')).map(input => +input.value);
+  
+  function isValidNumber (element, index, array){
+  return element >= 100 && element <= 300;
+};
 
-const input2 = document.querySelector('.input2')
+  function elementArr(arr){
+  if (arr.every(isValidNumber)){
+    const width = arr[0];
+    const height = arr[1];
+    let url = `https://picsum.photos/${width}/${height}`;
+    console.log(url)
+       return useRequest(url, displayResult)
+  } else {
+    insertData.innerHTML = 'Одно из чисел вне диапазона от 100 до 300'
+  }; 
+      };
+  
+  elementArr(data);
+}
 
-// let number1 = +input1.value;
-// let number2 = +input2.value;  
+// function displayResult(apiData){
+// let cards= '';
 
-myButton.addEventListener('click', () => {
-let data = Array.from(document.querySelectorAll('.input')).map(input => +input.value)
+// apiData.forEach(item =>{
+//     const cardBlock = `<div class = "card"> <img src= "${item.download_url}" class = "image"/><p>${item.autor}</p> </div>`
+//     cards += cardBlock;
+// });
+// insertData.innerHTML = cards;
+// }
 
-data.forEach((item) => 100 >= item || item >= 300? console.log('shit') : console.log('ok')  )
+   const useRequest = (url, callback) => {
+   return fetch(url)
+  .then((response) => {
+    console.log('response', response);
+    return response.json();
+     })
+  .then((json) => { return console.log(json);})
+  .catch(() => { console.log('error') }) 
+    
+  }
+      
 
+myButton.addEventListener('click', async() => {
+  formUrl()
+  const requestResult = await useRequest();
+    console.log('end');     
 })
