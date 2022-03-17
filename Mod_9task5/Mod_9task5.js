@@ -1,20 +1,23 @@
 const myButton = document.querySelector('.j-btn');
-const insertData = document.querySelector('.insertData')
+const insertData = document.querySelector('.insertData');
+
+
 
 function formRequest() {
-  let data = Array.from(document.querySelectorAll('.input')).map(input => +input.value);
+const pageNumber = document.querySelector('.pageNumber').value;
+const limit = document.querySelector('.limitNumber').value;
   
-  function isValidNumber (element, index, array){
-  return element >= 1 && element <= 10;
-};
-
-  function elementArr(arr){
-  if (arr.every(isValidNumber)){
-    const pageNumber = arr[0];
-    const limit = arr[1];
-    let url = `https://picsum.photos/v2/list?page=${pageNumber}&limit=${limit}`;
-    
-   fetch(url)
+//   function isValidNumber(element){
+//   return element >= 1 && element <= 10;
+// };
+  if ((0 >= pageNumber || pageNumber >= 11) && (0 >= limit  || limit >= 11)){
+    insertData.innerHTML = 'Оба числа вне диапазона от 1 до 10'
+  } else if (1 <= pageNumber <= 10 && (0 >= limit  || limit >= 11)){
+   insertData.innerHTML = 'Лимит вне диапазона от 1 до 10'
+ } else if ((0 >= pageNumber  || pageNumber >= 11) && 1 <= limit <= 10){
+   insertData.innerHTML = 'Страница вне диапазона от 1 до 10'
+ } else if (1 <= pageNumber <= 10 && 1 <= limit <= 10){
+    fetch(`https://picsum.photos/v2/list?page=${pageNumber}&limit=${limit}`)
   .then((response) => { const result = response.json();
                        return result
      })
@@ -23,29 +26,29 @@ function formRequest() {
        displayResult(data);})
          
     .catch(() => {console.log('ошибка загрузки фотографии')});
-  } else {
-    insertData.innerHTML = 'Одно из чисел вне диапазона от 1 до 10'
-  }; 
-      };
-  elementArr(data);
+  };
+  
 }
 
 function displayResult(apiData){
 let cards= '';
-
 apiData.forEach(item =>{
     const cardBlock = `<div class = "card"> <img src= "${item.download_url}" class = "image"/> </div>`
     cards += cardBlock;
 });
 insertData.innerHTML = cards;
-}
+};
 
+  
+  
 myButton.addEventListener('click', async() => {
     const requestResult = await formRequest();  
-})
+});
 
+  
+  
 if(localStorage.hasOwnProperty('data')){
   const apiData = localStorage.getItem('data');
   const JsonApiData = JSON.parse(apiData)
   displayResult(JsonApiData);
-}
+};
