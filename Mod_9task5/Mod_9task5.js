@@ -19,7 +19,8 @@ function formRequest() {
                        return result
      })
     .then((data) => {console.log(data);
-                    displayResult(data); })
+       localStorage.setItem('data', JSON.stringify(data));
+       displayResult(data);})
          
     .catch(() => {console.log('ошибка загрузки фотографии')});
   } else {
@@ -42,3 +43,9 @@ insertData.innerHTML = cards;
 myButton.addEventListener('click', async() => {
     const requestResult = await formRequest();  
 })
+
+if(localStorage.hasOwnProperty('data')){
+  const apiData = localStorage.getItem('data');
+  const JsonApiData = JSON.parse(apiData)
+  displayResult(JsonApiData);
+}
